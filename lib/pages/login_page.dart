@@ -34,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
     return false;
   }
 
+  //This function inturn calls validate and save and after that uses firebase to authenticate
   validateAndSubmit() async {
     if (validateAndSave()) {
       try {
@@ -60,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
+  //change from LOGIN to CREATE ACCOUNT
   moveToRegister() {
     formKey.currentState.reset();
     setState(() {
@@ -67,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  //Change form CREATE ACCOUNT to LOGIN
   moveToLogin() {
     setState(() {
       _formType = FormType.login;
@@ -77,9 +80,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        // appBar: AppBar(
-        //   title: Text("NSS TU"),
-        // ),
         body: ListView(
           children: <Widget>[
             Container(
@@ -96,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
+  //TOP TEXT
   List<Widget> tuText() {
     if (_formType == FormType.login) {
       return [
@@ -107,37 +108,66 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         Container(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              "Tezpur",
-              style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "University",
-                  style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  ".",
-                  style: TextStyle(
-                      fontSize: 50.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green),
-                ),
-              ],
-            )
-          ],
-        )),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Tezpur",
+                style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "University",
+                    style:
+                        TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    ".",
+                    style: TextStyle(
+                        fontSize: 50.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
       ];
     } else {
-      return [];
+      return [
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "SIGN UP",
+                    style:
+                        TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    ".",
+                    style: TextStyle(
+                        fontSize: 50.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        SizedBox(height: 50.0,)
+      ];
     }
   }
 
+  //EMAIL AND PASSWORD INPUT
   List<Widget> buildInputs() {
     return [
       TextFormField(
@@ -158,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       TextFormField(
         decoration: InputDecoration(
-          labelText: "Password",
+          labelText: "PASSWORD",
           labelStyle: TextStyle(
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.bold,
@@ -170,23 +200,23 @@ class _LoginPageState extends State<LoginPage> {
         obscureText: true,
         onSaved: (value) => _password = value,
       ),
-      SizedBox(
-        height: 5.0,
-      ),
-      Container(
-        alignment: Alignment.bottomRight,
-        padding: EdgeInsets.only(top: 15.0, left: 20.0),
-        child: InkWell(
-          child: Text(
-            "Forgot Password",
-            style: TextStyle(
-                color: Colors.green,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Montserrat',
-                decoration: TextDecoration.underline),
-          ),
-        ),
-      ),
+      // SizedBox(
+      //   height: 5.0,
+      // ),
+      // Container(
+      //   alignment: Alignment.bottomRight,
+      //   padding: EdgeInsets.only(top: 15.0, left: 20.0),
+      //   child: InkWell(
+      //     child: Text(
+      //       "Forgot Password",
+      //       style: TextStyle(
+      //           color: Colors.green,
+      //           fontWeight: FontWeight.bold,
+      //           fontFamily: 'Montserrat',
+      //           decoration: TextDecoration.underline),
+      //     ),
+      //   ),
+      // ),
       SizedBox(
         height: 40.0,
       ),
@@ -231,12 +261,27 @@ class _LoginPageState extends State<LoginPage> {
       ];
     } else {
       return [
-        RaisedButton(
-          child: Text(
-            "Create Account",
-            style: TextStyle(fontSize: 20.0),
+        Container(
+          height: 40.0,
+          child: InkWell(
+            onTap: validateAndSubmit,
+            child: Material(
+              borderRadius: BorderRadius.circular(20.0),
+              shadowColor: Colors.greenAccent,
+              color: Colors.green,
+              elevation: 7.0,
+              child: Center(
+                child: Text(
+                  "CREATE ACCOUNT",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+              ),
+            ),
           ),
-          onPressed: validateAndSubmit,
         ),
         FlatButton(
           child: Text(

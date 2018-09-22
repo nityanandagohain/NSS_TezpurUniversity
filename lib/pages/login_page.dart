@@ -76,34 +76,119 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        title: Text("NSS TU"),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: buildInputs() + buildSubmitButtons(),
+        key: scaffoldKey,
+        // appBar: AppBar(
+        //   title: Text("NSS TU"),
+        // ),
+        body: ListView(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(35.0),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: tuText() + buildInputs() + buildSubmitButtons(),
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  List<Widget> tuText() {
+    if (_formType == FormType.login) {
+      return [
+        Container(
+          padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+          child: Text(
+            "NSS",
+            style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
           ),
         ),
-      ),
-    );
+        Container(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Tezpur",
+              style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "University",
+                  style: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  ".",
+                  style: TextStyle(
+                      fontSize: 50.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green),
+                ),
+              ],
+            )
+          ],
+        )),
+      ];
+    } else {
+      return [];
+    }
   }
 
   List<Widget> buildInputs() {
     return [
       TextFormField(
-        decoration: InputDecoration(labelText: "Email"),
+        decoration: InputDecoration(
+          labelText: "EMAIL",
+          labelStyle: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
+              color: Colors.grey),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.green),
+          ),
+        ),
         onSaved: (value) => _email = value,
       ),
+      SizedBox(
+        height: 20.0,
+      ),
       TextFormField(
-        decoration: InputDecoration(labelText: "Password"),
+        decoration: InputDecoration(
+          labelText: "Password",
+          labelStyle: TextStyle(
+              fontFamily: 'Montserrat',
+              fontWeight: FontWeight.bold,
+              color: Colors.grey),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.green),
+          ),
+        ),
         obscureText: true,
         onSaved: (value) => _password = value,
+      ),
+      SizedBox(
+        height: 5.0,
+      ),
+      Container(
+        alignment: Alignment.bottomRight,
+        padding: EdgeInsets.only(top: 15.0, left: 20.0),
+        child: InkWell(
+          child: Text(
+            "Forgot Password",
+            style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Montserrat',
+                decoration: TextDecoration.underline),
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 40.0,
       ),
     ];
   }
@@ -111,12 +196,30 @@ class _LoginPageState extends State<LoginPage> {
   List<Widget> buildSubmitButtons() {
     if (_formType == FormType.login) {
       return [
-        RaisedButton(
-          child: Text(
-            "LOGIN",
-            style: TextStyle(fontSize: 20.0),
+        Container(
+          height: 40.0,
+          child: InkWell(
+            onTap: validateAndSubmit,
+            child: Material(
+              borderRadius: BorderRadius.circular(20.0),
+              shadowColor: Colors.greenAccent,
+              color: Colors.green,
+              elevation: 7.0,
+              child: Center(
+                child: Text(
+                  "LOGIN",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+              ),
+            ),
           ),
-          onPressed: validateAndSubmit,
+        ),
+        SizedBox(
+          height: 40.0,
         ),
         FlatButton(
           child: Text(

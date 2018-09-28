@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nss_tezu/pages/home.dart';
+import 'package:nss_tezu/pages/progress_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -37,11 +39,14 @@ class _LoginPageState extends State<LoginPage> {
   //This function inturn calls validate and save and after that uses firebase to authenticate
   validateAndSubmit() async {
     if (validateAndSave()) {
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => ProgressButton()));
       try {
         if (_formType == FormType.login) {
           FirebaseUser user = await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: _email, password: _password);
           print("Signed In: ${user.uid}");
+          // Navigator.pop(context);
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePageAfterLogin()));
         } else {
           FirebaseUser user = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
@@ -162,7 +167,9 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-        SizedBox(height: 50.0,)
+        SizedBox(
+          height: 50.0,
+        )
       ];
     }
   }
@@ -227,11 +234,11 @@ class _LoginPageState extends State<LoginPage> {
     if (_formType == FormType.login) {
       return [
         Container(
-          height: 40.0,
+          height: 50.0,
           child: InkWell(
             onTap: validateAndSubmit,
             child: Material(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(40.0),
               shadowColor: Colors.greenAccent,
               color: Colors.green,
               elevation: 7.0,

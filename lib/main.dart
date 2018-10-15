@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nss_tezu/pages/home.dart';
 import 'package:nss_tezu/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nss_tezu/pages/progress_button.dart';
 
 var user;
 void main() async {

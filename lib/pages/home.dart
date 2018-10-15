@@ -31,7 +31,6 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin> {
     subscription = collectionReference.snapshots().listen((datasnapshot) {
       setState(() {
         eventsData = datasnapshot.documents;
-        print("the data is ${eventsData[0].data['title']}");
       });
     });
   }

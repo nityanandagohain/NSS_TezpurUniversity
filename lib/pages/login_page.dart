@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 //Pages
 import 'package:nss_tezu/pages/home.dart';
 import 'package:nss_tezu/pages/progress_button.dart';
+import 'package:nss_tezu/services/usermanagement.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -20,6 +21,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String _email;
   String _password;
+  String _rollno;
+  String _name;
 
   FormType _formType = FormType.login;
 
@@ -33,6 +36,11 @@ class _LoginPageState extends State<LoginPage> {
         showError("Password length is small");
         return false;
       } else {
+        if (_formType == FormType.register &&
+            (_rollno.length < 6 || _name.length < 4)) {
+          showError("Rollno OR name is not valid");
+          return false;
+        }
         print("Valid $_email $_password");
         return true;
       }
@@ -67,6 +75,10 @@ class _LoginPageState extends State<LoginPage> {
               .createUserWithEmailAndPassword(
                   email: _email, password: _password);
           print("Registered : ${user.uid}");
+
+          //Store the user data in firebase
+          UserManagement().storeNewUser(user, _name, _rollno);
+
           hideProgress();
           moveToLogin();
         }
@@ -115,7 +127,10 @@ class _LoginPageState extends State<LoginPage> {
                     key: formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: tuText() + buildInputs() + buildSubmitButtons(),
+                      children: tuText() +
+                          buildInputs() +
+                          inputsForSignUp() +
+                          buildSubmitButtons(),
                     ),
                   ),
                 ),
@@ -250,6 +265,48 @@ class _LoginPageState extends State<LoginPage> {
         height: 40.0,
       ),
     ];
+  }
+
+  //INPUT FOR ROLLNO AND NAME WHILE SIGNUP
+  List<Widget> inputsForSignUp() {
+    if (_formType == FormType.login) {
+      return [];
+    } else {
+      return [
+        TextFormField(
+          decoration: InputDecoration(
+            labelText: "Name",
+            labelStyle: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold,
+                color: Colors.grey),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.green),
+            ),
+          ),
+          onSaved: (value) => _name = value,
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        TextFormField(
+          decoration: InputDecoration(
+            labelText: "RollNo",
+            labelStyle: TextStyle(
+                fontFamily: 'Montserrat',
+                fontWeight: FontWeight.bold,
+                color: Colors.grey),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.green),
+            ),
+          ),
+          onSaved: (value) => _rollno = value,
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+      ];
+    }
   }
 
   List<Widget> buildSubmitButtons() {

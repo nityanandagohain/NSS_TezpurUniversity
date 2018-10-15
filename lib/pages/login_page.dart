@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+
+//Firebase Packages
 import 'package:firebase_auth/firebase_auth.dart';
+
+//Pages
 import 'package:nss_tezu/pages/home.dart';
 import 'package:nss_tezu/pages/progress_button.dart';
 
@@ -19,12 +23,14 @@ class _LoginPageState extends State<LoginPage> {
 
   FormType _formType = FormType.login;
 
+  bool showProgressButton = false;
+
   bool validateAndSave() {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
       if (_email.length < 5 || _password.length < 5) {
-        showLoginError();
+        showError("Password length is small");
         return false;
       } else {
         print("Valid $_email $_password");
@@ -37,31 +43,45 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //This function inturn calls validate and save and after that uses firebase to authenticate
+  hideProgress() {
+    setState(() {
+      showProgressButton = false;
+    });
+  }
+
   validateAndSubmit() async {
     if (validateAndSave()) {
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => ProgressButton()));
+      setState(() {
+        showProgressButton = true;
+      });
       try {
         if (_formType == FormType.login) {
           FirebaseUser user = await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: _email, password: _password);
           print("Signed In: ${user.uid}");
-          Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePageAfterLogin()));
+          hideProgress();
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => HomePageAfterLogin()));
         } else {
           FirebaseUser user = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
                   email: _email, password: _password);
           print("Registered : ${user.uid}");
+          hideProgress();
+          moveToLogin();
         }
       } catch (err) {
-        print("Error: $err");
+        await hideProgress();
+        print("Error xyz: $err");
+        // showError("Error! Enter correct email and password");
       }
     }
   }
 
-  showLoginError() {
+  //Show a snackbar at the bottom
+  showError(String error) {
     final snackbar = SnackBar(
-      content: new Text("Enter proper Email and Password!"),
+      content: new Text(error),
     );
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
@@ -83,22 +103,24 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: scaffoldKey,
-        body: ListView(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(35.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: tuText() + buildInputs() + buildSubmitButtons(),
+    return showProgressButton == true
+        ? ProgressButton()
+        : Scaffold(
+            key: scaffoldKey,
+            body: ListView(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(35.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: tuText() + buildInputs() + buildSubmitButtons(),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        ));
+              ],
+            ));
   }
 
   //TOP TEXT

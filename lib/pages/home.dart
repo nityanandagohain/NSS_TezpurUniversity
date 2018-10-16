@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nss_tezu/pages/create_event.dart';
 
 //Pages
 import 'package:nss_tezu/pages/login_page.dart';
@@ -116,7 +117,10 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
     return new Scaffold(
       drawer: drawerLeft(),
       appBar: AppBar(
-          title: Text("NSS TU",style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),),
+          title: Text(
+            "NSS TU",
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+          ),
           backgroundColor: Colors.white,
           leading: MaterialButton(
             child: Icon(
@@ -261,6 +265,8 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
         ? FloatingActionButton(
             onPressed: () {
               //Go to add new event page
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => CreateEvent()));
             },
             child: Center(
               child: Icon(Icons.add),

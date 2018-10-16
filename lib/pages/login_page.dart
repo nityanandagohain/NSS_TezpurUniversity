@@ -135,7 +135,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ],
-            ));
+            ),
+          );
   }
 
   //TOP TEXT

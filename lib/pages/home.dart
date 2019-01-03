@@ -112,30 +112,32 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       drawer: customDrawer(context),
       appBar: AppBar(
-          title: Text(
-            "NSS TU",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+        title: Text(
+          "NSS TU",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+        ),
+        backgroundColor: Colors.white,
+        leading: MaterialButton(
+          child: Icon(
+            Icons.view_headline,
+            color: clr,
           ),
-          backgroundColor: Colors.white,
-          leading: MaterialButton(
-            child: Icon(
-              Icons.view_headline,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              scaffoldKey.currentState.openDrawer();
-            },
-          )),
+          onPressed: () {
+            scaffoldKey.currentState.openDrawer();
+          },
+        ),
+      ),
       key: scaffoldKey,
       body: AnimatedContainer(
-        padding: EdgeInsets.only(top: 50.0),
+        padding: EdgeInsets.only(left: 20.0),
         duration: Duration(milliseconds: 1000),
-        curve: Curves.ease,
+        curve: Curves.fastOutSlowIn,
         color: clr,
         child: PageView.builder(
+          scrollDirection: Axis.vertical,
           itemCount: _lengthOfEventsData,
           onPageChanged: (int page) {
             this.setState(() {
@@ -148,7 +150,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
           controller: pageViewController,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.only(left: 20.0),
+              padding: const EdgeInsets.only(top: 50.0),
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -215,37 +217,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                             ),
                           ),
                         ),
-                        Positioned(
-                          left: index != currentPage
-                              ? getMappedValue(20.0, 100.0, 160.0, 20.0, pos)
-                              : getMappedValue(20.0, 100.0, 20.0, -120.0, pos),
-                          bottom: 20.0,
-                          child: Opacity(
-                            opacity: index != currentPage
-                                ? getMappedValue(20.0, 100.0, 0.0, 0.4, pos)
-                                : getMappedValue(20.0, 100.0, 0.4, 00.0, pos),
-                            child: Text(
-                              '${eventsData[index].data['title']}',
-                              maxLines: 1,
-                              softWrap: true,
-                              style: TextStyle(
-                                  fontSize: 130.0, fontWeight: FontWeight.w900),
-                            ),
-                          ),
-                        ),
                       ],
-                    ),
-                  ),
-                  Positioned(
-                    right: index != currentPage
-                        ? getMappedValue(20.0, 100.0, -120.0, -10.0, pos)
-                        : getMappedValue(20.0, 100.0, -10.0, 120.0, pos),
-                    bottom: 100.0,
-                    child: Image.network(
-                      'https://images.unsplash.com/photo-1539635098943-31bab121ea34?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a966c23b465cfcf82fb1e88a1bce9eff&auto=format&fit=crop&w=1350&q=80',
-                      height: 240.0,
-                      width: 240.0,
-                      fit: BoxFit.contain,
                     ),
                   ),
                 ],

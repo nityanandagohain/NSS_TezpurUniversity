@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nss_tezu/pages/create_event.dart';
+import 'package:nss_tezu/pages/drawer.dart';
 
 //Pages
 import 'package:nss_tezu/pages/login_page.dart';
@@ -61,7 +62,6 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     subscription = collectionReference.snapshots().listen((datasnapshot) {
       setState(() {
@@ -106,8 +106,6 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    //if subscription is not null then cancel it
     subscription?.cancel();
     super.dispose();
   }
@@ -115,7 +113,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      drawer: drawerLeft(),
+      drawer: customDrawer(context),
       appBar: AppBar(
           title: Text(
             "NSS TU",
@@ -273,45 +271,5 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
             ),
           )
         : Container();
-  }
-
-  Widget drawerLeft() {
-    return Drawer(
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text('Drawer Header'),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-          ),
-          ListTile(
-            title: Text('Item 1'),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text('Sign Out'),
-            onTap: () async {
-              try {
-                await FirebaseAuth.instance.signOut();
-                print("Signed out");
-                // Navigator.pop(context);
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
-              } catch (e) {
-                print("Error Signing out");
-              }
-            },
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -7,7 +7,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 //Pages
 import 'package:nss_tezu/pages/home.dart';
-import 'package:nss_tezu/pages/progress_button.dart';
 import 'package:nss_tezu/services/usermanagement.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,15 +21,18 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
 
-  Future<FirebaseUser> _signIn() async {
+  Future _signIn() async {
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
     FirebaseUser user = await _auth.signInWithGoogle(
         idToken: gSA.idToken, accessToken: gSA.accessToken);
     print("use name ${user.displayName} uid: ${user.uid}");
+
+    //stores only once the user data in firestore
+    await UserManagement().storeNewUser(user);
+
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomePageAfterLogin()));
-    return user;
   }
 
   @override
@@ -101,9 +103,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           height: 50.0,
           child: InkWell(
-            onTap: () => _signIn()
-                .then((FirebaseUser user) => print("user"))
-                .catchError((e) => print(e)),
+            onTap: () => _signIn().catchError((e) => print("Error in signIn $e")),
             child: Material(
               borderRadius: BorderRadius.circular(40.0),
               shadowColor: Colors.greenAccent,

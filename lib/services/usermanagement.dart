@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserManagement {
-  Future storeNewUser(user) async {
+  Future storeNewUser(user, firebaseToken) async {
     try {
       bool exist = await checkIfAlreadyExist();
       if (!exist) {
@@ -11,7 +11,8 @@ class UserManagement {
           'email': user.email,
           'uid': user.uid,
           'name': user.displayName,
-          'role': role
+          'role': role,
+          'firebaseToken': firebaseToken
         }).catchError((e) {
           print(e);
         });

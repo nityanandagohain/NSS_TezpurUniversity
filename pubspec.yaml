@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: 
   cloud_firestore: 
   google_sign_in:
+  firebase_messaging:
 
 dev_dependencies:
   flutter_test:

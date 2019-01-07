@@ -4,6 +4,7 @@ import 'dart:async';
 //Firebase Packages
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 //Pages
 import 'package:nss_tezu/pages/home.dart';
@@ -15,11 +16,32 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final formKey = GlobalKey<FormState>();
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
+  String firebaseToken = "";
+  @override
+  void initState(){
+    super.initState();
+    _firebaseMessaging.configure(
+      onLaunch: (Map <String, dynamic> msg){
+        print("onLaunch called");
+      },
+      onMessage:  (Map <String, dynamic> msg){
+        print("onMessage called");
+      },
+      onResume:  (Map <String, dynamic> msg){
+        print("onResume called");
+      }
+    );
+    _firebaseMessaging.getToken().then((token){
+      this.setState((){
+        firebaseToken = token; 
+      });
+    });
+  }
 
   Future _signIn() async {
     GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -29,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
     print("use name ${user.displayName} uid: ${user.uid}");
 
     //stores only once the user data in firestore
-    await UserManagement().storeNewUser(user);
+    await UserManagement().storeNewUser(user, firebaseToken);
 
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomePageAfterLogin()));
@@ -43,12 +65,9 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.all(35.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: tuText() + buildSubmitButtons(),
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: tuText() + buildSubmitButtons(),
             ),
           ),
         ],
@@ -103,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           height: 50.0,
           child: InkWell(
-            onTap: () => _signIn().catchError((e) => print("Error in signIn $e")),
+            onTap: () =>
+                _signIn().catchError((e) => print("Error in signIn $e")),
             child: Material(
               borderRadius: BorderRadius.circular(40.0),
               shadowColor: Colors.greenAccent,

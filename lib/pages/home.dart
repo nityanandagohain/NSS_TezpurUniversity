@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:core';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 
 //Firebase packages
 import 'package:flutter/material.dart';
@@ -104,6 +105,12 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
         range2low;
   }
 
+  String getDateTimeStr(String str){
+    var _dateFormat = DateFormat("M/d/yy  h:mma");
+    DateTime _dateTime = DateTime.parse(str);
+    return _dateFormat.format(_dateTime);
+  }
+
   @override
   void dispose() {
     subscription?.cancel();
@@ -195,11 +202,11 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
-                                      'T',
+                                      getDateTimeStr(eventsData[index].data['dateTimeCreated']),
                                       softWrap: true,
                                       style: TextStyle(
-                                          fontSize: 30.0,
-                                          fontWeight: FontWeight.w300),
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ],
                                 ),
@@ -211,6 +218,16 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w300),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text("VENUE:"),
+                                      Text("Location: ${eventsData[index].data['venueLocation']}"),
+                                      Text("At: ${getDateTimeStr(eventsData[index].data['dateTimeVenue'])}")
+                                    ],
                                   ),
                                 ),
                               ],

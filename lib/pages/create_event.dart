@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreateEvent extends StatefulWidget {
@@ -13,9 +14,12 @@ class _CreateEventState extends State<CreateEvent> {
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  final dateTimeFormat = DateFormat("EEEE, M/d/y  h:mma");
+  DateTime _dateTime;
 
   String _title = "";
   String _info = "";
+  String _location = "";
   addEvent() async {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -24,6 +28,9 @@ class _CreateEventState extends State<CreateEvent> {
         await collectionReference.add({
           'info': _info,
           'title': _title,
+          'dateTimeCreated': DateTime.now().toString(),
+          'dateTimeVenue': _dateTime.toString(),
+          'venueLocation': _location
         }).catchError((err) {
           print("Error $err");
         });
@@ -88,6 +95,41 @@ class _CreateEventState extends State<CreateEvent> {
                       ),
                     ),
                     onSaved: (value) => _info = value,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: "Location of Venue",
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                    ),
+                    onSaved: (value) => _location = value,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  DateTimePickerFormField(
+                    format: dateTimeFormat,
+                    decoration: InputDecoration(
+                      labelText: "Date and time of Venue",
+                      labelStyle: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                      ),
+                    ),
+                    onChanged: (dt) => _dateTime = dt,
                   ),
                   SizedBox(
                     height: 10.0,

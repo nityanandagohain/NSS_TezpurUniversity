@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserManagement {
-  Future storeNewUser(user, firebaseToken) async {
+  Future storeNewUser(user) async {
     try {
       bool exist = await checkIfAlreadyExist();
       if (!exist) {
@@ -12,7 +12,7 @@ class UserManagement {
           'uid': user.uid,
           'name': user.displayName,
           'role': role,
-          'firebaseToken': firebaseToken
+          'firebaseToken': ""
         }).catchError((e) {
           print(e);
         });
@@ -21,6 +21,25 @@ class UserManagement {
       }
     } catch (err) {
       print("asdadsad $err");
+    }
+  }
+
+  Future addFirebaseMessagingToken(firebaseToken) async {
+    try {
+      var user = await FirebaseAuth.instance.currentUser();
+      var docs = await Firestore.instance
+          .collection("/users")
+          .where("uid", isEqualTo: user.uid)
+          .getDocuments();
+      if (docs.documents[0].exists) {
+        print(docs.documents[0].documentID);
+        await Firestore.instance
+            .collection("/users")
+            .document(docs.documents[0].documentID)
+            .updateData({"firebaseToken": firebaseToken});
+      }
+    } catch (err) {
+      print("Error occured in storing firebase messaging token");
     }
   }
 

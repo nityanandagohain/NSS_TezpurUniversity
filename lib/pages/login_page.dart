@@ -23,22 +23,19 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   String firebaseToken = "";
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _firebaseMessaging.configure(
-      onLaunch: (Map <String, dynamic> msg){
-        print("onLaunch called");
-      },
-      onMessage:  (Map <String, dynamic> msg){
-        print("onMessage called");
-      },
-      onResume:  (Map <String, dynamic> msg){
-        print("onResume called");
-      }
-    );
-    _firebaseMessaging.getToken().then((token){
-      this.setState((){
-        firebaseToken = token; 
+    _firebaseMessaging.configure(onLaunch: (Map<String, dynamic> msg) {
+      print("onLaunch called");
+    }, onMessage: (Map<String, dynamic> msg) {
+      print("onMessage called");
+    }, onResume: (Map<String, dynamic> msg) {
+      print("onResume called");
+    });
+    _firebaseMessaging.getToken().then((token) {
+      this.setState(() {
+        print("Firebase Messaging token: $token");
+        firebaseToken = token;
       });
     });
   }
@@ -51,7 +48,8 @@ class _LoginPageState extends State<LoginPage> {
     print("use name ${user.displayName} uid: ${user.uid}");
 
     //stores only once the user data in firestore
-    await UserManagement().storeNewUser(user, firebaseToken);
+    await UserManagement().storeNewUser(user);
+    await UserManagement().addFirebaseMessagingToken(firebaseToken);
 
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomePageAfterLogin()));

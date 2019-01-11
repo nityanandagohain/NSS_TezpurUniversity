@@ -55,7 +55,20 @@ class _CreateEventState extends State<CreateEvent> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("CREATE EVENT"),
+        title: Text(
+          "NSS TEZU",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        leading: MaterialButton(
+          child: Icon(
+            Icons.navigate_before,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: ListView(
         children: <Widget>[

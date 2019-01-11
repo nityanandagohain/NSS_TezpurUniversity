@@ -12,8 +12,8 @@ import 'package:nss_tezu/pages/create_event.dart';
 import 'package:nss_tezu/pages/drawer.dart';
 
 //Pages
-import 'package:nss_tezu/pages/login_page.dart';
 import 'package:nss_tezu/services/usermanagement.dart';
+import 'package:nss_tezu/pages/userprofile.dart';
 
 class HomePageAfterLogin extends StatefulWidget {
   @override
@@ -105,7 +105,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
         range2low;
   }
 
-  String getDateTimeStr(String str){
+  String getDateTimeStr(String str) {
     var _dateFormat = DateFormat("M/d/yy  h:mma");
     DateTime _dateTime = DateTime.parse(str);
     return _dateFormat.format(_dateTime);
@@ -123,9 +123,18 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
       drawer: customDrawer(context),
       appBar: AppBar(
         title: Text(
-          "NSS TU",
+          "NSS TEZU",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
         ),
+        actions: <Widget>[
+          FlatButton(
+            child: Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => UserProfile()));
+            },
+          )
+        ],
         backgroundColor: Colors.white,
         leading: MaterialButton(
           child: Icon(
@@ -202,7 +211,8 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
-                                      getDateTimeStr(eventsData[index].data['dateTimeCreated']),
+                                      getDateTimeStr(eventsData[index]
+                                          .data['dateTimeCreated']),
                                       softWrap: true,
                                       style: TextStyle(
                                           fontSize: 13.0,
@@ -225,8 +235,10 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                                   child: Column(
                                     children: <Widget>[
                                       Text("VENUE:"),
-                                      Text("Location: ${eventsData[index].data['venueLocation']}"),
-                                      Text("At: ${getDateTimeStr(eventsData[index].data['dateTimeVenue'])}")
+                                      Text(
+                                          "Location: ${eventsData[index].data['venueLocation']}"),
+                                      Text(
+                                          "At: ${getDateTimeStr(eventsData[index].data['dateTimeVenue'])}")
                                     ],
                                   ),
                                 ),

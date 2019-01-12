@@ -24,6 +24,7 @@ class _UserProfileState extends State<UserProfile> {
     try {
       print("d $_hostel d");
       await UserManagement().updateUserProfile(_name, _rollno, _hostel);
+      toggleView();
     } catch (err) {
       print(err);
     }

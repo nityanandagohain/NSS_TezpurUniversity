@@ -207,7 +207,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                                       softWrap: true,
                                       style: TextStyle(
                                           color: Colors.deepOrange,
-                                          fontSize: 22.0,
+                                          fontSize: 14.0,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(

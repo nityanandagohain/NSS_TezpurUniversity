@@ -1,8 +1,9 @@
 # nss_tezu
+Mobile app for NSS Tezpur University
 
-A new Flutter project.
+Built using Flutter and Firebase.
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+### Screenshots:
+![1st](./assets/screenshots/1st.PNG)
+![2nd](./assets/screenshots/2nd.PNG)
+![3rd](./assets/screenshots/3rd.PNG)

@@ -6,5 +6,6 @@
 
 build/
 
+.vscode
 .flutter-plugins
 **/android/app/google-services.json

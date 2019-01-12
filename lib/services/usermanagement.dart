@@ -11,6 +11,8 @@ class UserManagement {
           'email': user.email,
           'uid': user.uid,
           'name': user.displayName,
+          'rollno': "",
+          'hostel': "",
           'role': role,
           'firebaseToken': ""
         }).catchError((e) {
@@ -32,7 +34,6 @@ class UserManagement {
           .where("uid", isEqualTo: user.uid)
           .getDocuments();
       if (docs.documents[0].exists) {
-        print(docs.documents[0].documentID);
         await Firestore.instance
             .collection("/users")
             .document(docs.documents[0].documentID)
@@ -40,6 +41,25 @@ class UserManagement {
       }
     } catch (err) {
       print("Error occured in storing firebase messaging token");
+    }
+  }
+
+  Future updateUserProfile(name, rollno, hostel) async {
+    try {
+      print("$name $rollno $hostel");
+      var user = await FirebaseAuth.instance.currentUser();
+      var docs = await Firestore.instance
+          .collection("/users")
+          .where("uid", isEqualTo: user.uid)
+          .getDocuments();
+      if (docs.documents[0].exists) {
+        await Firestore.instance
+            .collection("/users")
+            .document(docs.documents[0].documentID)
+            .updateData({"name": name, "rollno": rollno, "hostel": hostel});
+      }
+    } catch (err) {
+      print("Err occured in updateUserProfile in usermanagement");
     }
   }
 

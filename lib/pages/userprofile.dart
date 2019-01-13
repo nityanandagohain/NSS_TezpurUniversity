@@ -15,6 +15,7 @@ class _UserProfileState extends State<UserProfile> {
 
   //Data from firestore will be DocumentSnapshot
   List<DocumentSnapshot> eventsData;
+  final _formKey = GlobalKey<FormState>();
   String _name = "";
   String _rollno = "";
   String _hostel = "";
@@ -22,7 +23,9 @@ class _UserProfileState extends State<UserProfile> {
   List<DocumentSnapshot> userData;
   void saveProfile() async {
     try {
-      print("d $_hostel d");
+      final form = _formKey.currentState;
+      form.save();
+      print("d $_name/ $_rollno/ $_hostel d");
       await UserManagement().updateUserProfile(_name, _rollno, _hostel);
       toggleView();
     } catch (err) {
@@ -77,6 +80,7 @@ class _UserProfileState extends State<UserProfile> {
       body: Center(
         child: edit
             ? Form(
+              key: _formKey,
                 child: Column(
                   children: <Widget>[
                     TextFormField(

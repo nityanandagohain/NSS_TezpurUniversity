@@ -28,11 +28,7 @@ class UserManagement {
 
   Future addFirebaseMessagingToken(firebaseToken) async {
     try {
-      var user = await FirebaseAuth.instance.currentUser();
-      var docs = await Firestore.instance
-          .collection("/users")
-          .where("uid", isEqualTo: user.uid)
-          .getDocuments();
+      var docs = await getAllDocs();
       if (docs.documents[0].exists) {
         await Firestore.instance
             .collection("/users")
@@ -46,12 +42,7 @@ class UserManagement {
 
   Future updateUserProfile(name, rollno, hostel) async {
     try {
-      print("$name $rollno $hostel");
-      var user = await FirebaseAuth.instance.currentUser();
-      var docs = await Firestore.instance
-          .collection("/users")
-          .where("uid", isEqualTo: user.uid)
-          .getDocuments();
+      var docs = await getAllDocs();
       if (docs.documents[0].exists) {
         await Firestore.instance
             .collection("/users")
@@ -65,17 +56,26 @@ class UserManagement {
 
   //This function will return true if the user is an admin
   Future<bool> checkIfAdmin() async {
-    var user = await FirebaseAuth.instance.currentUser();
-    var docs = await Firestore.instance
-        .collection('/users')
-        .where('uid', isEqualTo: user.uid)
-        .getDocuments();
+    var docs = await getAllDocs();
     if (docs.documents[0].exists) {
       if (docs.documents[0].data['role'] == "admin") {
         return true;
       }
     }
     return false;
+  }
+
+  Future<QuerySnapshot> getAllDocs() async {
+    try {
+      var user = await FirebaseAuth.instance.currentUser();
+      var docs = await Firestore.instance
+          .collection('/users')
+          .where('uid', isEqualTo: user.uid)
+          .getDocuments();
+      return docs;
+    } catch (err) {
+      throw (err);
+    }
   }
 
   Future<bool> checkIfAlreadyExist() async {

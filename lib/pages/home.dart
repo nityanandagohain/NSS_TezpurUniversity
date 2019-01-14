@@ -68,7 +68,8 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
       setState(() {
         var tEventsData = datasnapshot.documents;
         //Sort the data in descending order according to time of creation
-        tEventsData.sort((x,y)=>y.data["dateTimeCreated"].compareTo(x.data["dateTimeCreated"]));
+        tEventsData.sort((x, y) =>
+            y.data["dateTimeCreated"].compareTo(x.data["dateTimeCreated"]));
         eventsData = tEventsData;
         _lengthOfEventsData = eventsData.length;
       });
@@ -120,6 +121,11 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
     super.dispose();
   }
 
+  Future<String> _getUserPhoto() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user.photoUrl;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,7 +137,20 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
         ),
         actions: <Widget>[
           FlatButton(
-            child: Icon(Icons.account_circle),
+            child: FutureBuilder(
+              future: _getUserPhoto(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return Container(
+                  width: 35.0,
+                  height: 35.0,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(snapshot.data))),
+                );
+              },
+            ),
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => UserProfile()));

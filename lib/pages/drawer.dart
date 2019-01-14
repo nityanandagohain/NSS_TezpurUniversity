@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nss_tezu/pages/chatPage.dart';
 import 'login_page.dart';
 import 'dart:async';
 
@@ -8,29 +9,57 @@ Widget customDrawer(context) {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     return user.displayName;
   }
+
+  Future<String> _getUserPhoto() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user.photoUrl;
+  }
+
   return Drawer(
     child: ListView(
       // Important: Remove any padding from the ListView.
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
-          child: FutureBuilder(
-            future: _getUser(),
-            builder: (BuildContext context, AsyncSnapshot snapshot){
-              return Text("Welcome ${snapshot.data}",style: TextStyle(fontFamily: 'Montserrat', fontSize: 15.0,fontWeight: FontWeight.w400),);
-            },
+          child: Column(
+            children: <Widget>[
+              FutureBuilder(
+                future: _getUserPhoto(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  return Container(
+                    width: 90.0,
+                    height: 90.0,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(snapshot.data))),
+                  );
+                },
+              ),
+              FutureBuilder(
+                future: _getUser(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  return Text(
+                    "Welcome ${snapshot.data}",
+                    style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w400),
+                  );
+                },
+              ),
+            ],
           ),
           decoration: BoxDecoration(
             color: Colors.blue,
           ),
         ),
         ListTile(
-          title: Text('Item 1'),
+          title: Text('Chat'),
           onTap: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => ChatPage()));
           },
         ),
         ListTile(

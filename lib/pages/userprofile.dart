@@ -20,7 +20,7 @@ class _UserProfileState extends State<UserProfile> {
   String _rollno = "";
   String _hostel = "";
   bool edit = false;
-  List<DocumentSnapshot> userData;
+  List<DocumentSnapshot> userData=[];
   void saveProfile() async {
     try {
       final form = _formKey.currentState;

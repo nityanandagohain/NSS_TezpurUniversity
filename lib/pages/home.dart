@@ -66,7 +66,10 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
     super.initState();
     subscription = collectionReference.snapshots().listen((datasnapshot) {
       setState(() {
-        eventsData = datasnapshot.documents;
+        var tEventsData = datasnapshot.documents;
+        //Sort the data in descending order according to time of creation
+        tEventsData.sort((x,y)=>y.data["dateTimeCreated"].compareTo(x.data["dateTimeCreated"]));
+        eventsData = tEventsData;
         _lengthOfEventsData = eventsData.length;
       });
     });

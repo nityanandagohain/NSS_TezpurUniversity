@@ -140,15 +140,21 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
             child: FutureBuilder(
               future: _getUserPhoto(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return Container(
-                  width: 35.0,
-                  height: 35.0,
-                  decoration: new BoxDecoration(
+                if (snapshot.data != null) {
+                  return Container(
+                    width: 35.0,
+                    height: 35.0,
+                    decoration: new BoxDecoration(
                       shape: BoxShape.circle,
                       image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(snapshot.data))),
-                );
+                        fit: BoxFit.fill,
+                        image: NetworkImage(snapshot.data),
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
               },
             ),
             onPressed: () {

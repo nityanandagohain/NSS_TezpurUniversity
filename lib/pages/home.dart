@@ -110,7 +110,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
   }
 
   String getDateTimeStr(String str) {
-    var _dateFormat = DateFormat("M/d/yy  h:mma");
+    var _dateFormat = DateFormat("M.d.yy  h:mma");
     DateTime _dateTime = DateTime.parse(str);
     return _dateFormat.format(_dateTime);
   }
@@ -229,7 +229,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                                       softWrap: true,
                                       style: TextStyle(
                                           color: Colors.deepOrange,
-                                          fontSize: 14.0,
+                                          fontSize: 12.0,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
@@ -237,7 +237,7 @@ class _HomePageAfterLoginState extends State<HomePageAfterLogin>
                                           .data['dateTimeCreated']),
                                       softWrap: true,
                                       style: TextStyle(
-                                          fontSize: 13.0,
+                                          fontSize: 10.0,
                                           fontWeight: FontWeight.w500),
                                     ),
                                   ],

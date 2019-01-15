@@ -26,15 +26,24 @@ Widget customDrawer(context) {
               FutureBuilder(
                 future: _getUserPhoto(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  return Container(
-                    width: 90.0,
-                    height: 90.0,
-                    decoration: new BoxDecoration(
+                  if (snapshot.data != null) {
+                    return Container(
+                      width: 90.0,
+                      height: 90.0,
+                      decoration: new BoxDecoration(
                         shape: BoxShape.circle,
                         image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(snapshot.data))),
-                  );
+                          fit: BoxFit.fill,
+                          image: NetworkImage(snapshot.data),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      width: 90.0,
+                      height: 90.0,
+                    );
+                  }
                 },
               ),
               FutureBuilder(
@@ -58,7 +67,7 @@ Widget customDrawer(context) {
         ListTile(
           title: Text('Chat'),
           onTap: () {
-            Navigator.pushReplacement(
+            Navigator.push(
                 context, MaterialPageRoute(builder: (context) => ChatPage()));
           },
         ),

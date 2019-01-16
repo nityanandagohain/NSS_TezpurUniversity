@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       Center(
         child: Text(
-          "Built by Nityananda Gohain",
+          "Developed by Nityananda Gohain",overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontFamily: 'Montserrat'),
         ),
       )

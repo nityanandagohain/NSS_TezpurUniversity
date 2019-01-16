@@ -108,6 +108,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               children: <Widget>[
                 Flexible(
                   child: Container(
+                    padding: const EdgeInsets.only(left: 10.0),
                     child: TextField(
                       style: TextStyle(color: Colors.blue, fontSize: 15.0),
                       controller: _textEditingController,

@@ -20,7 +20,7 @@ class _UserProfileState extends State<UserProfile> {
   String _rollno = "";
   String _hostel = "";
   bool edit = false;
-  List<DocumentSnapshot> userData=[];
+  List<DocumentSnapshot> userData = [];
   void saveProfile() async {
     try {
       final form = _formKey.currentState;
@@ -80,103 +80,105 @@ class _UserProfileState extends State<UserProfile> {
       body: Center(
         child: edit
             ? Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      initialValue: _name,
-                      decoration: InputDecoration(
-                        labelText: "Name",
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
+                padding: const EdgeInsets.all(40.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        initialValue: _name,
+                        decoration: InputDecoration(
+                          labelText: "Name",
+                          labelStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
                         ),
+                        onSaved: (value) => _name = value,
                       ),
-                      onSaved: (value) => _name = value,
-                    ),
-                    TextFormField(
-                      initialValue: _rollno,
-                      decoration: InputDecoration(
-                        labelText: "Roll No",
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
+                      TextFormField(
+                        initialValue: _rollno,
+                        decoration: InputDecoration(
+                          labelText: "Roll No",
+                          labelStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
                         ),
+                        onSaved: (value) => _rollno = value,
                       ),
-                      onSaved: (value) => _rollno = value,
-                    ),
-                    TextFormField(
-                      initialValue: _hostel,
-                      decoration: InputDecoration(
-                        labelText: "Hostel",
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
+                      TextFormField(
+                        initialValue: _hostel,
+                        decoration: InputDecoration(
+                          labelText: "Hostel",
+                          labelStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                          ),
                         ),
+                        onSaved: (value) => _hostel = value,
                       ),
-                      onSaved: (value) => _hostel = value,
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    MaterialButton(
-                      child: Text("SUBMIT"),
-                      color: Colors.greenAccent,
-                      onPressed: saveProfile,
-                    ),
-                  ],
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      MaterialButton(
+                        child: Text("SUBMIT"),
+                        color: Colors.greenAccent,
+                        onPressed: saveProfile,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-            : Center(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 40.0,
+              )
+            : userData == []
+                ? Container()
+                : Center(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 40.0,
+                        ),
+                        Text(
+                          _name,
+                          style: textDisplayStyle(),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        Text(
+                          _rollno,
+                          style: textDisplayStyle(),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        Text(
+                          _hostel,
+                          style: textDisplayStyle(),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        MaterialButton(
+                          child: Text(
+                            "EDIT",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          color: Colors.green,
+                          onPressed: toggleView,
+                        ),
+                      ],
                     ),
-                    Text(
-                      userData[0].data["name"],
-                      style: textDisplayStyle(),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      userData[0].data["rollno"],
-                      style: textDisplayStyle(),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      userData[0].data["hostel"],
-                      style: textDisplayStyle(),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    MaterialButton(
-                      child: Text(
-                        "EDIT",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.green,
-                      onPressed: toggleView,
-                    ),
-                  ],
-                ),
-              ),
+                  ),
       ),
     );
   }

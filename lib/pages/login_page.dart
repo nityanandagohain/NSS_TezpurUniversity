@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 //Pages
 import 'package:nss_tezu/pages/home.dart';
+import 'package:nss_tezu/pages/progress_button.dart';
 import 'package:nss_tezu/services/usermanagement.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
   String firebaseToken = "";
+  bool loading = false;
   @override
   void initState() {
     super.initState();
@@ -40,36 +42,49 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  toggleLoading() {
+    setState(() {
+      loading = !loading;
+    });
+  }
+
   Future _signIn() async {
-    GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
-    FirebaseUser user = await _auth.signInWithGoogle(
-        idToken: gSA.idToken, accessToken: gSA.accessToken);
-    print("use name ${user.displayName} uid: ${user.uid}");
+    try {
+      toggleLoading();
+      GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+      GoogleSignInAuthentication gSA = await googleSignInAccount.authentication;
+      FirebaseUser user = await _auth.signInWithGoogle(
+          idToken: gSA.idToken, accessToken: gSA.accessToken);
+      print("use name ${user.displayName} uid: ${user.uid}");
 
-    //stores only once the user data in firestore
-    await UserManagement().storeNewUser(user);
-    await UserManagement().addFirebaseMessagingToken(firebaseToken);
-
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => HomePageAfterLogin()));
+      //stores only once the user data in firestore
+      await UserManagement().storeNewUser(user);
+      await UserManagement().addFirebaseMessagingToken(firebaseToken);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => HomePageAfterLogin()));
+    } catch (err) {
+      toggleLoading();
+      print("Error google sign in");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: ListView(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(35.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: tuText() + buildSubmitButtons(),
+      body: loading
+          ? ProgressButton()
+          : ListView(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(35.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: tuText() + buildSubmitButtons(),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -146,7 +161,8 @@ class _LoginPageState extends State<LoginPage> {
       ),
       Center(
         child: Text(
-          "Developed by Nityananda Gohain",overflow: TextOverflow.ellipsis,
+          "Developed by Nityananda Gohain",
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(color: Colors.black, fontFamily: 'Montserrat'),
         ),
       )
